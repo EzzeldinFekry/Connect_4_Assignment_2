@@ -32,7 +32,8 @@ A Python implementation of **Connect 4** with AI opponents using three different
 ## Game Rules
 - Human plays as *Red, AI as **Yellow*
 - Take turns dropping discs into columns
-- First player to get *4 in a row* (horizontally, vertically, or diagonally) wins
+- Higher player who gets *4 in a row* (horizontally, vertically, or diagonally) wins
+- Game ends when the board is full
 - *Human always starts first*
 
 ## Algorithm Details
