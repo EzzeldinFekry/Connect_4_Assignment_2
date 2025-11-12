@@ -30,9 +30,9 @@ A Python implementation of **Connect 4** with AI opponents using three different
 4. *Click Start* to begin playing
 
 ## Game Rules
-- Human plays as *Red, AI as **Yellow*
+- Human plays as Red, AI as *Yellow*
 - Take turns dropping discs into columns
-- Higher player who gets *4 in a row* (horizontally, vertically, or diagonally) wins
+- The player who gets more *4s in a row* (horizontally, vertically, or diagonally) wins
 - Game ends when the board is full
 - *Human always starts first*
 
@@ -50,6 +50,7 @@ Models physical uncertainty where discs may slide to adjacent columns:
 - *60% chance* disc lands in chosen column
 - *20% chance* slides left to C-1 (if valid)
 - *20% chance* slides right to C+1 (if valid)
+- *40% chance* if only one side available 
 
 ### Performance Optimization
 - Memoization for repeated board states
