@@ -80,7 +80,7 @@ class Connect4:
         self.buttons = []
         
         for col in range(self.cols):
-            btn = tk.Button(btn_frame, text="â", width=3, 
+            btn = tk.Button(btn_frame, text="↓", width=3, 
                           command=lambda c=col: self.human_move(c),
                           bg="#3498db", fg="white", font=("Arial", 11, "bold"))
             btn.pack(side=tk.LEFT, padx=2)
@@ -198,11 +198,11 @@ class Connect4:
         
         # Determine winner
         if human_score > ai_score:
-            result = "You Win! ð"
+            result = "You Win! 🎉"
         elif ai_score > human_score:
-            result = "AI Wins! ð¤"
+            result = "AI Wins! 🤖"
         else:
-            result = "Tie Game! ð¤"
+            result = "Tie Game! 🤝"
         
         result += f"\nFinal Score - Human: {human_score} | AI: {ai_score}"
         
@@ -218,7 +218,7 @@ class Connect4:
     # ==================== MINIMAX ALGORITHM ====================
     def minimax_search(self):
         """Root call for minimax algorithm - finds best move for AI"""
-        print(f"\n{'â'*60}\nMINIMAX TREE\n{'â'*60}")
+        print(f"\n{'─'*60}\nMINIMAX TREE\n{'─'*60}")
         best_col, best_score = None, -math.inf
         valid_cols = [c for c in range(self.cols) if self.valid_move(c)]
         
@@ -229,13 +229,13 @@ class Connect4:
             board_copy = self.make_move(col, 2)
             self.nodes_expanded += 1  # Count root's children
             score = self.minimax(board_copy, self.depth-1, False, 1, col)
-            print(f"  â Column {col}: Score = {score}")
+            print(f"  → Column {col}: Score = {score}")
             
             if score > best_score:
                 best_score = score
                 best_col = col
         
-        print(f"{'â'*60}\nBEST MOVE: Column {best_col}, Score {best_score}\n{'â'*60}")
+        print(f"{'─'*60}\nBEST MOVE: Column {best_col}, Score {best_score}\n{'─'*60}")
         return best_col, best_score
     
     def minimax(self, board, depth, is_max, level, last_move):
@@ -252,7 +252,7 @@ class Connect4:
         if depth == 0 or self.is_full(board):
             h = self.heuristic(board)
             print(f"{indent}[Depth {self.depth-depth}] {'MAX' if is_max else 'MIN'} "
-                  f"Move={last_move} â LEAF, Heuristic={h}")
+                  f"Move={last_move} → LEAF, Heuristic={h}")
             return h
         
         valid_cols = [c for c in range(self.cols) if self.is_valid(board, c)]
@@ -282,25 +282,25 @@ class Connect4:
     # ==================== ALPHA-BETA PRUNING ====================
     def alphabeta_search(self):
         """Root call for alpha-beta pruning - optimized minimax"""
-        print(f"\n{'â'*60}\nALPHA-BETA PRUNING TREE\n{'â'*60}")
+        print(f"\n{'─'*60}\nALPHA-BETA PRUNING TREE\n{'─'*60}")
         best_col, best_score = None, -math.inf
         alpha, beta = -math.inf, math.inf
         valid_cols = [c for c in range(self.cols) if self.valid_move(c)]
         
-        print(f"Root [MAX, AI] - Valid: {valid_cols}, Î±={alpha}, Î²={beta}, H={self.heuristic()}")
+        print(f"Root [MAX, AI] - Valid: {valid_cols}, α={alpha}, β={beta}, H={self.heuristic()}")
         
         for col in valid_cols:
             board_copy = self.make_move(col, 2)
             self.nodes_expanded += 1
             score = self.alphabeta(board_copy, self.depth-1, alpha, beta, False, 1, col)
-            print(f"  â Column {col}: Score = {score}, Î± updated to {max(alpha, score)}")
+            print(f"  → Column {col}: Score = {score}, α updated to {max(alpha, score)}")
             
             if score > best_score:
                 best_score = score
                 best_col = col
             alpha = max(alpha, score)  # Update alpha at root
         
-        print(f"{'â'*60}\nBEST MOVE: Column {best_col}, Score {best_score}\n{'â'*60}")
+        print(f"{'─'*60}\nBEST MOVE: Column {best_col}, Score {best_score}\n{'─'*60}")
         return best_col, best_score
     
     def alphabeta(self, board, depth, alpha, beta, is_max, level, last_move):
@@ -316,7 +316,7 @@ class Connect4:
         if depth == 0 or self.is_full(board):
             h = self.heuristic(board)
             print(f"{indent}[D{self.depth-depth}] {'MAX' if is_max else 'MIN'} "
-                  f"M={last_move} â H={h}, Î±={alpha:.1f}, Î²={beta:.1f}")
+                  f"M={last_move} → H={h}, α={alpha:.1f}, β={beta:.1f}")
             return h
         
         valid_cols = [c for c in range(self.cols) if self.is_valid(board, c)]
@@ -332,7 +332,7 @@ class Connect4:
                 
                 # Beta cutoff: minimizer won't choose this path
                 if beta <= alpha:
-                    print(f"{indent}â PRUNED (Î²={beta:.1f} â¤ Î±={alpha:.1f})")
+                    print(f"{indent}✂ PRUNED (β={beta:.1f} ≤ α={alpha:.1f})")
                     break
             
             print(f"{indent}[D{self.depth-depth}] MAX returns {max_score}")
@@ -349,7 +349,7 @@ class Connect4:
                 
                 # Alpha cutoff: maximizer won't choose this path
                 if beta <= alpha:
-                    print(f"{indent}â PRUNED (Î²={beta:.1f} â¤ Î±={alpha:.1f})")
+                    print(f"{indent}✂ PRUNED (β={beta:.1f} ≤ α={alpha:.1f})")
                     break
             
             print(f"{indent}[D{self.depth-depth}] MIN returns {min_score}")
@@ -367,7 +367,7 @@ class Connect4:
         
         OPTIMIZATION: Uses memoization to cache repeated board states
         """
-        print(f"\n{'â'*60}\nEXPECTIMAX TREE (OPTIMIZED)\n{'â'*60}")
+        print(f"\n{'─'*60}\nEXPECTIMAX TREE (OPTIMIZED)\n{'─'*60}")
         print("Disc placement: 60% chosen, 20% left, 20% right (40% if one side blocked)")
         
         best_col, best_score = None, -math.inf
@@ -389,7 +389,7 @@ class Connect4:
             # AI chooses column, then expectation node handles physical uncertainty
             self.nodes_expanded += 1
             expected = self.compute_expected_outcome(self.board, col, 2, self.depth-1, False, 0)
-            print(f"  â Column {col}: Expected Value = {expected:.2f}")
+            print(f"  → Column {col}: Expected Value = {expected:.2f}")
             
             if expected > best_score:
                 best_score = expected
@@ -398,7 +398,7 @@ class Connect4:
         total_lookups = self.cache_hits + self.cache_misses
         hit_rate = 100 * self.cache_hits / total_lookups if total_lookups > 0 else 0
         print(f"\nCache: {self.cache_hits}/{total_lookups} hits ({hit_rate:.1f}%)")
-        print(f"{'â'*60}\nBEST MOVE: Column {best_col}, Score {best_score:.2f}\n{'â'*60}")
+        print(f"{'─'*60}\nBEST MOVE: Column {best_col}, Score {best_score:.2f}\n{'─'*60}")
         return best_col, best_score
     
     def compute_expected_outcome(self, board, chosen_col, player, depth, is_max, level):
@@ -439,7 +439,7 @@ class Connect4:
             score = self.expectimax(new_board, depth, is_max, level+1, landing_col)
             expected_value += prob * score
             
-            print(f"{indent}  â Col {landing_col} (P={prob}): {score:.2f}")
+            print(f"{indent}  → Col {landing_col} (P={prob}): {score:.2f}")
         
         print(f"{indent}  Expected: {expected_value:.2f}")
         return expected_value
@@ -468,7 +468,7 @@ class Connect4:
         # Base case: leaf node
         if depth == 0 or self.is_full(board):
             h = self.heuristic(board)
-            print(f"{indent}[D{self.depth-depth}] LEAF â H={h}")
+            print(f"{indent}[D{self.depth-depth}] LEAF → H={h}")
             self.expectimax_cache[cache_key] = h
             return h
         
@@ -483,7 +483,7 @@ class Connect4:
                 expected = self.compute_expected_outcome(board, col, 2, depth-1, False, level+1)
                 max_score = max(max_score, expected)
             
-            print(f"{indent}MAX â {max_score:.2f}")
+            print(f"{indent}MAX → {max_score:.2f}")
             self.expectimax_cache[cache_key] = max_score
             return max_score
             
@@ -496,7 +496,7 @@ class Connect4:
                 expected = self.compute_expected_outcome(board, col, 1, depth-1, True, level+1)
                 min_score = min(min_score, expected)
             
-            print(f"{indent}MIN â {min_score:.2f}")
+            print(f"{indent}MIN → {min_score:.2f}")
             self.expectimax_cache[cache_key] = min_score
             return min_score
     
@@ -666,7 +666,7 @@ class Connect4:
         print("  " + " ".join(str(i) for i in range(self.cols)))
         for row in self.board:
             display = " ".join("." if c==0 else ("R" if c==1 else "Y") for c in row)
-            print(f"â {display} â")
+            print(f"│ {display} │")
         print(f"Heuristic Evaluation: {self.heuristic()}\n")
     
     # ==================== MAIN ====================
